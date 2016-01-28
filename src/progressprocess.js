@@ -1,5 +1,5 @@
 /*!
- * ProgressProcess v0.1.0
+ * ProgressProcess v0.1.1
  * Copyright (c) 2016 Sergey Korshunov
  * https://github.com/korshunovpro/js.stepprogress/blob/master/LICENSE
  */
@@ -31,10 +31,6 @@ var ProgressProcess = function () {
 
         if (typeof callback !== 'function') {
             throw new Error('"callback" is not a function');
-        }
-
-        if (typeof showCallback !== "undefined" && typeof showCallback !== 'function') {
-            throw new Error('"showCallback" is not a function');
         }
 
         // first step 0%
