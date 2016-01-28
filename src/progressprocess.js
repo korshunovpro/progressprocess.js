@@ -1,4 +1,4 @@
-function ProcessProgress () {
+var ProgressProcess = function () {
 
     var _this = this;
 
@@ -7,7 +7,7 @@ function ProcessProgress () {
 
     this.doNext = false;
 
-    this.process = function (stepCurrent, stepCount, callback, showCallback) {
+    this.run = function (stepCurrent, stepCount, callback, showCallback) {
 
         if (stepCurrent > stepCount || stepCurrent <= 0 || stepCount <= 0) {
             throw new Error('"stepCount" must be greater then "stepCurrent" and both arguments must be greater then 0');
@@ -52,7 +52,7 @@ function ProcessProgress () {
         }
     };
 
-}
+};
 
 
 
