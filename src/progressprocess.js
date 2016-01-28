@@ -33,10 +33,6 @@ var ProgressProcess = function () {
             throw new Error('"callback" is not a function');
         }
 
-        if (typeof showCallback !== "undefined" && typeof showCallback !== 'function') {
-            throw new Error('"showCallback" is not a function');
-        }
-
         // first step 0%
         callback(_this);
         show(0, stepCount, showCallback);
