@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js Step Progress</title>
+    <script src="src/progress.js"></script>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<script>
+    var proc = new ProcessProgress();
+    proc.process(1, 5, function() {
+        setTimeout(function(){
+            proc.doNext = true;
+        }, 1500)
+    },
+    function (p, stepCurrent, stepCount) {
+        var elem = document.getElementById('progress')
+        elem.innerHTML = p + '%';
+    });
+
+</script>
+
+</body>
+</html>
