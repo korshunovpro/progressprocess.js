@@ -2,26 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>js Step Progress</title>
-    <script src="src/progress.js"></script>
+    <title>Progress Step By Step</title>
+    <script src="src/progressprocess.js"></script>
+    <style>
+        body {
+            text-align: center;
+        }
+        #progress {
+            height:50px;
+        }
+    </style>
 </head>
 <body>
 
-<div id="progress"></div>
+<div id="progress">
+    <b id="percent"></b>
+    <span id="step"></span>
+</div>
+<button onclick="progressRun()">Run</button>
 
 <script>
-    var proc = new ProcessProgress();
-    proc.process(1, 5, function() {
-        setTimeout(function(){
-            proc.doNext = true;
-        }, 1500)
-    },
-    function (p, stepCurrent, stepCount) {
-        var elem = document.getElementById('progress')
-        elem.innerHTML = p + '%';
-    });
+    function progressRun() {
+        var FakeProgress = new ProgressProcess();
+        var stepStart = 1,
+            stepCount = 5;
 
+        FakeProgress.run(stepStart, stepCount,
+            function() {
+
+                // fake ajax call
+                setTimeout(function(){
+                    FakeProgress.doNext = true;
+                }, 1500)
+
+            },
+            function (percent, stepCurrent, stepCount) {
+                var elemPercent = document.getElementById('percent');
+                var elemStep = document.getElementById('step');
+                elemPercent.innerHTML = percent + '%';
+                elemStep.innerHTML = '( Step ' + stepCurrent + ' of ' + stepCount + ': complete)';
+            }
+        );
+    }
 </script>
-
 </body>
 </html>
