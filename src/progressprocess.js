@@ -1,12 +1,27 @@
+/*!
+ * ProgressProcess v0.1.0
+ * Copyright 2016 https://github.com/korshunovpro/
+ */
+
+/**
+ * ProgressProcess
+ * @constructor
+ */
 var ProgressProcess = function () {
 
-    var _this = this;
+    var _this = this,
+        interval,
+        percentLast;
 
-    var interval;
-    var percentLast = 0;
+    this.proceed = false;
 
-    this.doNext = false;
-
+    /**
+     * run
+     * @param stepCurrent
+     * @param stepCount
+     * @param callback
+     * @param showCallback
+     */
     this.run = function (stepCurrent, stepCount, callback, showCallback) {
 
         if (stepCurrent > stepCount || stepCurrent <= 0 || stepCount <= 0) {
@@ -17,15 +32,22 @@ var ProgressProcess = function () {
             throw new Error('"callback" is not a function');
         }
 
-        // first step - 0%
+        if (typeof showCallback !== "undefined" && typeof showCallback !== 'function') {
+            throw new Error('"showCallback" is not a function');
+        }
+
+        // first step 0%
         callback(_this);
         show(0, stepCount, showCallback);
 
+        // main loop
         interval = setInterval( function() {
 
-            if (_this.doNext) {
+            if (_this.proceed) {
+                _this.proceed = false;
+
                 show(stepCurrent, stepCount, showCallback);
-                _this.doNext = false;
+
                 ++stepCurrent;
                 if (stepCurrent <= stepCount) {
                     callback(_this);
@@ -35,23 +57,31 @@ var ProgressProcess = function () {
             if (stepCurrent > stepCount) {
                 clearInterval(interval);
             }
-
         }, 50);
-
     };
 
+    /**
+     * runNext
+     */
+    this.runNext = function () {
+        _this.proceed = true;
+    };
+
+    /**
+     * show
+     * @param stepCurrent
+     * @param stepCount
+     * @param showCallback
+     */
     var show = function (stepCurrent, stepCount, showCallback) {
         var percent = Math.floor(stepCurrent / (stepCount / 100));
         if (percent > percentLast || percent == 0) {
             percentLast = percent;
             if (typeof showCallback === 'function') {
                 showCallback(percent, stepCurrent, stepCount)
-            } else {
-                console.log(percent + '%');
             }
         }
     };
-
 };
 
 
