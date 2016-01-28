@@ -1,6 +1,7 @@
 /*!
  * ProgressProcess v0.1.0
- * Copyright 2016 https://github.com/korshunovpro/
+ * Copyright (c) 2016 Sergey Korshunov
+ * https://github.com/korshunovpro/js.stepprogress/blob/master/LICENSE
  */
 
 /**
