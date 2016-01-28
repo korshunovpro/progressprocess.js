@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Progress Step By Step</title>
+    <script src="vendor/jquery-1.11.3.min.js"></script>
+    <script src="src/progressprocess.jquery.js"></script>
     <script src="src/progressprocess.js"></script>
     <style>
         body {
             text-align: center;
         }
-        #progress {
-            height:50px;
+
+        #progress, #progress-jquery {
+            height: 50px;
         }
     </style>
 </head>
@@ -23,27 +26,52 @@
 
 <script>
     function progressRun() {
-        var FakeProgress = new ProgressProcess();
-        var stepStart = 1,
-            stepCount = 5;
-
-        FakeProgress.run(stepStart, stepCount,
-            function() {
-
+        new ProgressProcess().run({
+            stepCurrent: 1,
+            stepCount: 100,
+            callback: function (progress) {
                 // fake ajax call
-                setTimeout(function(){
-                    FakeProgress.runNext();
-                }, 1500)
-
+                setTimeout(function () {
+                    progress.runNext();
+                }, 100)
             },
-            function (percent, stepCurrent, stepCount) {
+            showCallback: function (percent, stepCurrent, stepCount) {
                 var elemPercent = document.getElementById('percent');
                 var elemStep = document.getElementById('step');
                 elemPercent.innerHTML = percent + '%';
                 elemStep.innerHTML = '( Step ' + stepCurrent + ' of ' + stepCount + ': complete)';
             }
-        );
+        });
     }
 </script>
+
+<hr>
+<div id="progress-jquery">
+    <b id="percent-jquery"></b>
+    <span id="step-jquery"></span>
+</div>
+<button onclick="jQueryProgressRun()">Run jQuery ver</button>
+
+<script>
+    function jQueryProgressRun() {
+        $('#progress-jquery').progressProcess({
+            stepCurrent: 1,
+            stepCount: 100,
+            callback: function (progress) {
+                // fake ajax call
+                setTimeout(function () {
+                    progress.runNext();
+                }, 100)
+            },
+            showCallback: function (percent, stepCurrent, stepCount) {
+                var elemPercent = document.getElementById('percent-jquery');
+                var elemStep = document.getElementById('step-jquery');
+                elemPercent.innerHTML = percent + '%';
+                elemStep.innerHTML = '( Step ' + stepCurrent + ' of ' + stepCount + ': complete)';
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

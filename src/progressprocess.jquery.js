@@ -1,39 +1,44 @@
 /*!
- * ProgressProcess v0.1.3
+ * ProgressProcess.jQuery v0.1.3
  * Copyright (c) 2016 Sergey Korshunov
  * https://github.com/korshunovpro/progressprocess.js/blob/master/LICENSE
  */
 
-/**
- * ProgressProcess
- * @constructor
- */
-var ProgressProcess = function () {
+;(function (window, document, $, undefined) {
+    "use strict";
 
     var _this = this,
         interval,
         percentLast = 0;
 
-    var opt = {
+    var opt,
+        defaults = {
             stepCurrent : 0,
             stepCount : 0,
             callback : null,
             showCallback : null
         };
 
-    this.proceed = false;
+
+    var progressProcess = $.fn.progressProcess = function(options) {
+        opt = $.extend({}, defaults, options);
+        progressProcess.run();
+        return progressProcess;
+    };
+
+    progressProcess.proceed = false;
+
+    /**
+     * runNext
+     */
+    progressProcess.runNext = function () {
+        progressProcess.proceed = true;
+    };
 
     /**
      * run
-     * @param options
      */
-    this.run = function (options) {
-
-        for(var prop in options) {
-            if (opt.hasOwnProperty(prop)) {
-                opt[prop] = options[prop];
-            }
-        }
+    progressProcess.run = function () {
 
         if (opt.stepCurrent > opt.stepCount || opt.stepCurrent <= 0 || opt.stepCount <= 0) {
             throw new Error('"stepCount" must be greater then "stepCurrent" and both arguments must be greater then 0');
@@ -44,20 +49,20 @@ var ProgressProcess = function () {
         }
 
         // first step 0%
-        opt.callback(_this);
-        show(0, opt.stepCount, opt.showCallback);
+        opt.callback(progressProcess);
+        progressProcess.show(0, opt.stepCount, opt.showCallback);
 
         // main loop
         interval = setInterval( function() {
 
-            if (_this.proceed) {
-                _this.proceed = false;
+            if (progressProcess.proceed) {
+                progressProcess.proceed = false;
 
-                show(opt.stepCurrent, opt.stepCount, opt.showCallback);
+                progressProcess.show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
                 ++opt.stepCurrent;
                 if (opt.stepCurrent <= opt.stepCount) {
-                    opt.callback(_this);
+                    opt.callback(progressProcess);
                 }
             }
 
@@ -68,19 +73,12 @@ var ProgressProcess = function () {
     };
 
     /**
-     * runNext
-     */
-    this.runNext = function () {
-        _this.proceed = true;
-    };
-
-    /**
      * show
      * @param stepCurrent
      * @param stepCount
      * @param showCallback
      */
-    var show = function (stepCurrent, stepCount, showCallback) {
+    progressProcess.show = function (stepCurrent, stepCount, showCallback) {
         var percent = Math.floor(stepCurrent / (stepCount / 100));
         if (percent > percentLast || percent == 0) {
             percentLast = percent;
@@ -89,8 +87,5 @@ var ProgressProcess = function () {
             }
         }
     };
-};
 
-
-
-
+}(window, document, jQuery));
