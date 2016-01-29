@@ -19,7 +19,12 @@
             showCallback : null
         };
 
+    var proceed = false;
 
+    /**
+     * $.fn.progressProcess
+     * @type {jQuery.progressProcess}
+     */
     var progressProcess = $.fn.progressProcess = function(options) {
         element = this;
         opt = $.extend({}, defaults, options);
@@ -27,13 +32,11 @@
         return progressProcess;
     };
 
-    progressProcess.proceed = false;
-
     /**
      * runNext
      */
     progressProcess.runNext = function () {
-        progressProcess.proceed = true;
+        proceed = true;
     };
 
     /**
@@ -56,8 +59,8 @@
         // main loop
         interval = setInterval( function() {
 
-            if (progressProcess.proceed) {
-                progressProcess.proceed = false;
+            if (proceed) {
+                proceed = false;
 
                 show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
