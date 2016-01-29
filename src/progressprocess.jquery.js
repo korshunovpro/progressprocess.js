@@ -51,7 +51,7 @@
 
         // first step 0%
         opt.callback(progressProcess);
-        progressProcess.show(0, opt.stepCount, opt.showCallback);
+        show(0, opt.stepCount, opt.showCallback);
 
         // main loop
         interval = setInterval( function() {
@@ -59,7 +59,7 @@
             if (progressProcess.proceed) {
                 progressProcess.proceed = false;
 
-                progressProcess.show(opt.stepCurrent, opt.stepCount, opt.showCallback);
+                show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
                 ++opt.stepCurrent;
                 if (opt.stepCurrent <= opt.stepCount) {
@@ -79,7 +79,7 @@
      * @param stepCount
      * @param showCallback
      */
-    progressProcess.show = function (stepCurrent, stepCount, showCallback) {
+    var show = function (stepCurrent, stepCount, showCallback) {
         var percent = Math.floor(stepCurrent / (stepCount / 100));
         if (percent > percentLast || percent == 0) {
             percentLast = percent;
