@@ -1,5 +1,5 @@
 /*!
- * ProgressProcess.jQuery v0.1.3
+ * ProgressProcess.jQuery v0.1.4
  * Copyright (c) 2016 Sergey Korshunov
  * https://github.com/korshunovpro/progressprocess.js/blob/master/LICENSE
  */
@@ -7,7 +7,7 @@
 ;(function (window, document, $, undefined) {
     "use strict";
 
-    var _this = this,
+    var element,
         interval,
         percentLast = 0;
 
@@ -21,6 +21,7 @@
 
 
     var progressProcess = $.fn.progressProcess = function(options) {
+        element = this;
         opt = $.extend({}, defaults, options);
         progressProcess.run();
         return progressProcess;

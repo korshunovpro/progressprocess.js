@@ -28,10 +28,13 @@
     function progressRun() {
         new ProgressProcess().run({
             stepCurrent: 1,
-            stepCount: 100,
+            stepCount: 580,
             callback: function (progress) {
                 // fake ajax call
                 setTimeout(function () {
+
+                    // success and run next step
+
                     progress.runNext();
                 }, 100)
             },
@@ -56,10 +59,13 @@
     function jQueryProgressRun() {
         $('#progress-jquery').progressProcess({
             stepCurrent: 1,
-            stepCount: 100,
+            stepCount: 200,
             callback: function (progress) {
                 // fake ajax call
                 setTimeout(function () {
+
+                    // success and run next step
+
                     progress.runNext();
                 }, 100)
             },
