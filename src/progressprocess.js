@@ -11,7 +11,6 @@
 var ProgressProcess = function () {
 
     var _this = this,
-        start = false,
         interval,
         percentLast = 0;
 
