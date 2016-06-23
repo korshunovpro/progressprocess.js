@@ -1,5 +1,5 @@
 /*!
- * ProgressProcess v0.1.3
+ * ProgressProcess v0.1.5
  * Copyright (c) 2016 Sergey Korshunov
  * https://github.com/korshunovpro/progressprocess.js/blob/master/LICENSE
  */
@@ -11,6 +11,7 @@
 var ProgressProcess = function () {
 
     var _this = this,
+        start = false,
         interval,
         percentLast = 0;
 
@@ -24,10 +25,12 @@ var ProgressProcess = function () {
     this.proceed = false;
 
     /**
-     * run
+     * start
      * @param options
      */
-    this.run = function (options) {
+    this.start = function (options) {
+
+        if (interval) return;
 
         for(var prop in options) {
             if (opt.hasOwnProperty(prop)) {
@@ -47,7 +50,17 @@ var ProgressProcess = function () {
         opt.callback(_this);
         show(0, opt.stepCount, opt.showCallback);
 
-        // main loop
+        this.run();
+    };
+
+    /**
+     * run
+     * @param
+     */
+    this.run = function () {
+
+        if (interval) return;
+
         interval = setInterval( function() {
 
             if (_this.proceed) {
@@ -64,14 +77,23 @@ var ProgressProcess = function () {
             if (opt.stepCurrent > opt.stepCount) {
                 clearInterval(interval);
             }
-        }, 50);
+        }, 20);
     };
 
     /**
-     * runNext
+     * run next
      */
-    this.runNext = function () {
+    this.next = function () {
         _this.proceed = true;
+    };
+
+    /**
+     * pause
+     */
+    this.pause = function () {
+        _this.proceed = false;
+        clearInterval(interval);
+        interval = false;
     };
 
     /**
