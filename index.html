@@ -20,7 +20,7 @@
     <b id="percent"></b>
     <span id="step"></span>
 </div>
-<button onclick="progressRun(10000)">Start</button>
+<button onclick="progressRun(250)">Start</button>
 <button onclick="progressPause()">Pause</button>
 <button onclick="progressContinue()">Continue</button>
 
@@ -44,7 +44,7 @@
                     if (result) {
                         progress.next();
                     }
-                }, 50);
+                }, 500);
 
             },
             showCallback: function (percent, stepCurrent, stepCount) {

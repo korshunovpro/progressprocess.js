@@ -45,10 +45,6 @@ var ProgressProcess = function () {
             throw new Error('"callback" is not a function');
         }
 
-        // first step 0%
-        opt.callback(_this);
-        show(0, opt.stepCount, opt.showCallback);
-
         return this.run();
     };
 
@@ -59,6 +55,8 @@ var ProgressProcess = function () {
     this.run = function () {
 
         if (interval) return false;
+
+        _this.proceed = true;
 
         interval = setInterval( function() {
 
