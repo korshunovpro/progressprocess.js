@@ -29,7 +29,7 @@ var ProgressProcess = function () {
      */
     this.start = function (options) {
 
-        if (interval) return;
+        if (interval) return false;
 
         for(var prop in options) {
             if (opt.hasOwnProperty(prop)) {
@@ -49,7 +49,7 @@ var ProgressProcess = function () {
         opt.callback(_this);
         show(0, opt.stepCount, opt.showCallback);
 
-        this.run();
+        return this.run();
     };
 
     /**
@@ -58,7 +58,7 @@ var ProgressProcess = function () {
      */
     this.run = function () {
 
-        if (interval) return;
+        if (interval) return false;
 
         interval = setInterval( function() {
 
@@ -77,6 +77,8 @@ var ProgressProcess = function () {
                 clearInterval(interval);
             }
         }, 20);
+
+        return true;
     };
 
     /**
@@ -90,9 +92,10 @@ var ProgressProcess = function () {
      * pause
      */
     this.pause = function () {
-        _this.proceed = false;
-        clearInterval(interval);
-        interval = false;
+        if (interval)  {
+            clearInterval(interval);
+            interval = false;
+        }
     };
 
     /**
