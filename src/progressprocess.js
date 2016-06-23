@@ -65,10 +65,10 @@ var ProgressProcess = function () {
 
                 show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
-                ++opt.stepCurrent;
                 if (opt.stepCurrent <= opt.stepCount) {
                     opt.callback(_this);
                 }
+                ++opt.stepCurrent;
             }
 
             if (opt.stepCurrent > opt.stepCount) {
