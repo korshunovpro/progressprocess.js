@@ -45,7 +45,7 @@ var ProgressProcess = function () {
             throw new Error('"callback" is not a function');
         }
 
-        return this.run();
+        return _this.run();
     };
 
     /**
@@ -72,7 +72,7 @@ var ProgressProcess = function () {
             }
 
             if (opt.stepCurrent > opt.stepCount) {
-                clearInterval(interval);
+                _this.pause();
             }
         }, 20);
 
