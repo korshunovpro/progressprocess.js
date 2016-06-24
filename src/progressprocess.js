@@ -56,7 +56,7 @@ var ProgressProcess = function () {
 
         if (interval) return false;
 
-        _this.proceed = true;
+        _this.next();
 
         interval = setInterval( function() {
 
