@@ -87,7 +87,7 @@ var ProgressProcess = function () {
     };
 
     /**
-     * pause
+     * pause/stop
      */
     this.pause = function () {
         if (interval)  {
