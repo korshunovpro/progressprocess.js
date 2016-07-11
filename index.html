@@ -9,7 +9,7 @@
             text-align: center;
         }
 
-        #progress, #progress-jquery {
+        #progress {
             height: 50px;
         }
     </style>
@@ -20,24 +20,34 @@
     <b id="percent"></b>
     <span id="step"></span>
 </div>
-<button onclick="progressRun(250)">Start</button>
-<button onclick="progressPause()">Pause</button>
-<button onclick="progressContinue()">Continue</button>
+<button onclick="progressRun(progressExample, 250, null, 'percent', 'step')">Start</button>
+<button onclick="progressPause(progressExample)">Pause</button>
+<button onclick="progressContinue(progressExample)">Continue</button>
 
 <script>
 
     var progressExample = new ProgressProcess();
 
-    var percentElement = document.getElementById('percent');
-    var stepElement = document.getElementById('step');
-    function progressRun(stepCount, stepCurrent) {
+    /**
+     *
+     * @param process               instance of ProgressProcess
+     * @param stepCount             number of steps
+     * @param stepCurrent           current step. default = 1
+     * @param percentElemID         css element id for current percent
+     * @param currentStepElemID     css element id for current step
+     */
+    function progressRun(process, stepCount, stepCurrent, percentElemID, currentStepElemID) {
+
+        var percentElement = document.getElementById(percentElemID);
+        var stepElement = document.getElementById(currentStepElemID);
+
         stepCurrent = (stepCurrent || 1);
-        progressExample.start({
+        process.start({
             stepCurrent: stepCurrent,
             stepCount: stepCount,
             callback: function (progress) {
 
-                // fake ajax call
+                // fake "ajax" call
                 setTimeout(function () {
                     // success and run next step
                     var result = logic(stepCurrent);
@@ -54,12 +64,20 @@
         });
     }
 
-    function progressPause() {
-        progressExample.pause();
+    /**
+     *
+     * @param process instance of ProgressProcess
+     */
+    function progressPause(process) {
+        process.pause();
     }
 
-    function progressContinue() {
-        progressExample.run();
+    /**
+     *
+     * @param process instance of ProgressProcess
+     */
+    function progressContinue(process) {
+        process.run();
     }
 
 </script>
@@ -67,6 +85,11 @@
 <hr>
 
 <script>
+    /**
+     * fake logic
+     * @param stepCurrent
+     * @returns {boolean}
+     */
     function logic(stepCurrent) {
         return !!stepCurrent;
     }
