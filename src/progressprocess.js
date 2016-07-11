@@ -12,7 +12,8 @@ var ProgressProcess = function () {
 
     var _this = this,
         interval,
-        percentLast = 0;
+        percentLast = 0,
+        proceed = false;
 
     var opt = {
             stepCurrent : 0,
@@ -20,8 +21,6 @@ var ProgressProcess = function () {
             callback : null,
             showCallback : null
         };
-
-    this.proceed = false;
 
     /**
      * start
@@ -60,8 +59,8 @@ var ProgressProcess = function () {
 
         interval = setInterval( function() {
 
-            if (_this.proceed) {
-                _this.proceed = false;
+            if (proceed) {
+                proceed = false;
 
                 show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
@@ -83,7 +82,7 @@ var ProgressProcess = function () {
      * run next
      */
     this.next = function () {
-        _this.proceed = true;
+        proceed = true;
     };
 
     /**
