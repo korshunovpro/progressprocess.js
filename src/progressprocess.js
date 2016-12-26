@@ -16,22 +16,21 @@ var ProgressProcess = function () {
         proceed = false;
 
     var opt = {
-            stepCurrent : 0,
-            stepCount : 0,
-            callback : null,
-            showCallback : null
-        };
+        stepCurrent: 0,
+        stepCount: 0,
+        callback: null,
+        showCallback: null
+    };
 
     /**
      * start
      * @param options
      */
     this.start = function (options) {
-
         if (interval) return false;
 
-        for(var prop in options) {
-            if (opt.hasOwnProperty(prop)) {
+        for (var prop in options) {
+            if (options.hasOwnProperty(prop) && opt.hasOwnProperty(prop)) {
                 opt[prop] = options[prop];
             }
         }
@@ -49,19 +48,14 @@ var ProgressProcess = function () {
 
     /**
      * run
-     * @param
      */
     this.run = function () {
-
         if (interval) return false;
 
         _this.next();
-
-        interval = setInterval( function() {
-
+        interval = setInterval(function () {
             if (proceed) {
                 proceed = false;
-
                 show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
                 if (opt.stepCurrent <= opt.stepCount) {
@@ -89,7 +83,7 @@ var ProgressProcess = function () {
      * pause/stop
      */
     this.pause = function () {
-        if (interval)  {
+        if (interval) {
             clearInterval(interval);
             interval = false;
         }
@@ -103,7 +97,7 @@ var ProgressProcess = function () {
      */
     var show = function (stepCurrent, stepCount, showCallback) {
         var percent = Math.floor(stepCurrent / (stepCount / 100));
-        if (percent > percentLast || percent == 0) {
+        if (percent > percentLast || percent === 0) {
             percentLast = percent;
             if (typeof showCallback === 'function') {
                 showCallback(percent, stepCurrent, stepCount)
