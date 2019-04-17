@@ -12,31 +12,44 @@ var ProgressProcess = function () {
 
     var _this = this,
         interval,
-        percentLast = 0,
         proceed = false;
 
+    /**
+     * Options
+     * @type {{callback: null, showCallback: null}}
+     */
     var opt = {
-        stepCurrent: 0,
-        stepCount: 0,
         callback: null,
         showCallback: null
     };
 
     /**
-     * start
-     * @param options
+     * Runtime vars
+     * @type {{percent: number, data: {}}}
      */
-    this.start = function (options) {
+    var runtime = {
+        percent: 0,
+        data: {}
+    };
+
+    /**
+     * start
+     * @param optInit
+     * @param runtimeInit
+     */
+    this.start = function (optInit, runtimeInit) {
         if (interval) return false;
 
-        for (var prop in options) {
-            if (options.hasOwnProperty(prop) && opt.hasOwnProperty(prop)) {
-                opt[prop] = options[prop];
+        for (var propOpt in optInit) {
+            if (optInit.hasOwnProperty(propOpt) && optInit.hasOwnProperty(propOpt)) {
+                opt[propOpt] = optInit[propOpt];
             }
         }
 
-        if (opt.stepCurrent > opt.stepCount || opt.stepCurrent <= 0 || opt.stepCount <= 0) {
-            throw new Error('"stepCount" must be greater then "stepCurrent" and both arguments must be greater then 0');
+        for (var propRuntime in runtimeInit) {
+            if (runtimeInit.hasOwnProperty(propRuntime) && runtime.hasOwnProperty(propRuntime)) {
+                runtime[propRuntime] = runtimeInit[propRuntime];
+            }
         }
 
         if (typeof opt.callback !== 'function') {
@@ -52,21 +65,22 @@ var ProgressProcess = function () {
     this.run = function () {
         if (interval) return false;
 
-        _this.next();
+        _this.next(runtime.data);
         interval = setInterval(function () {
             if (proceed) {
                 proceed = false;
-                show(opt.stepCurrent, opt.stepCount, opt.showCallback);
 
-                if (opt.stepCurrent <= opt.stepCount) {
-                    opt.callback(_this);
+                if (runtime.percent >= 100) {
+                    _this.pause();
                 }
-                ++opt.stepCurrent;
+
+                show();
+
+                if (runtime.percent < 100) {
+                    opt.callback(_this, runtime);
+                }
             }
 
-            if (opt.stepCurrent > opt.stepCount) {
-                _this.pause();
-            }
         }, 20);
 
         return true;
@@ -75,7 +89,13 @@ var ProgressProcess = function () {
     /**
      * run next
      */
-    this.next = function () {
+    this.next = function (data) {
+        data = (data || runtime.data);
+        for (var prop in runtime) {
+            if (data.hasOwnProperty(prop) && runtime.hasOwnProperty(prop)) {
+                runtime[prop] = data[prop];
+            }
+        }
         proceed = true;
     };
 
@@ -91,16 +111,12 @@ var ProgressProcess = function () {
 
     /**
      * show
-     * @param stepCurrent
-     * @param stepCount
-     * @param showCallback
      */
-    var show = function (stepCurrent, stepCount, showCallback) {
-        var percent = Math.floor(stepCurrent / (stepCount / 100));
-        if (percent > percentLast || percent === 0) {
-            percentLast = percent;
-            if (typeof showCallback === 'function') {
-                showCallback(percent, stepCurrent, stepCount)
+    var show = function () {
+        runtime.percent = Math.floor(runtime.percent);
+        if (runtime.percent >= 0 ) {
+            if (typeof opt.showCallback === 'function') {
+                opt.showCallback(runtime.percent, runtime.data.info)
             }
         }
     };

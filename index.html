@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Progress Step By Step</title>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
     <script src="src/progressprocess.js"></script>
     <style>
         body {
@@ -20,7 +24,7 @@
     <b id="percent"></b>
     <span id="step"></span>
 </div>
-<button onclick="progressRun(progressExample, 250, null, 'percent', 'step')">Start</button>
+<button onclick="progressRun(progressExample, {data: {elementID:0, info : ''}}, 'percent', 'step')">Start</button>
 <button onclick="progressPause(progressExample)">Pause</button>
 <button onclick="progressContinue(progressExample)">Continue</button>
 
@@ -28,40 +32,27 @@
 
     var progressExample = new ProgressProcess();
 
-    /**
-     *
-     * @param process               instance of ProgressProcess
-     * @param stepCount             number of steps
-     * @param stepCurrent           current step. default = 1
-     * @param percentElemID         css element id for current percent
-     * @param currentStepElemID     css element id for current step
-     */
-    function progressRun(process, stepCount, stepCurrent, percentElemID, currentStepElemID) {
+    function progressRun(process, dataInit, percentElemID, currentStepElemID) {
 
-        var percentElement = document.getElementById(percentElemID);
-        var stepElement = document.getElementById(currentStepElemID);
-
-        stepCurrent = (stepCurrent || 1);
         process.start({
-            stepCurrent: stepCurrent,
-            stepCount: stepCount,
-            callback: function (progress) {
+                callback: function (progress, runtime) {
+                    // fake "ajax" call
+                    setTimeout(function () {
+                        // success and run next step
+                        runtime.percent = (runtime.percent + 5);
+                        runtime.data.elementID = runtime.data.elementID + 3;
+                        runtime.data.info = runtime.data.elementID;
+                        progress.next(runtime);
+                    }, 500);
 
-                // fake "ajax" call
-                setTimeout(function () {
-                    // success and run next step
-                    var result = logic(stepCurrent);
-                    if (result) {
-                        progress.next();
-                    }
-                }, 500);
-
-            },
-            showCallback: function (percent, stepCurrent, stepCount) {
-                percentElement.innerHTML = percent + '%';
-                stepElement.innerHTML = '( Step ' + stepCurrent + ' of ' + stepCount + ': complete)';
-            }
-        });
+                },
+                showCallback: function (percent, info) {
+                    document.getElementById(percentElemID).innerHTML = percent + '%';
+                    document.getElementById(currentStepElemID).innerHTML = '( ' + info + ': complete)';
+                }
+            }, {
+                data: dataInit
+            });
     }
 
     /**
@@ -83,18 +74,6 @@
 </script>
 
 <hr>
-
-<script>
-    /**
-     * fake logic
-     * @param stepCurrent
-     * @returns {boolean}
-     */
-    function logic(stepCurrent) {
-        return !!stepCurrent;
-    }
-</script>
-
 
 </body>
 </html>
